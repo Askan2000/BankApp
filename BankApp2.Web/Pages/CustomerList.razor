@@ -1,0 +1,34 @@
+﻿@*@page "/"
+@inherits CustomerListBase
+
+<h3>CustomerList</h3>
+
+@if(Customers ==null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    @foreach(var customer in Customers)
+    {
+        <table>
+            <tr>
+                <th> Namn </th>
+                <th> Stad </th>
+                <th> Transaktion </th>
+                <th> Lån </th>
+            </tr>
+            <tr>
+                <td> @customer.Givenname</td>
+                <td> @customer.City</td>
+                <td> 
+                    <a href= "@($"customerdetails/{customer.CustomerId}")" class = "btn btn-primary m-1"> Se detaljer </a> 
+                </td>
+                <td>
+                    <a href= "#" class = "btn btn-primary m-1"> Lägg upp lån</a>         
+                </td>
+            </tr>
+        </table>
+    }    
+}
+*@

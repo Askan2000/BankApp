@@ -1,0 +1,15 @@
+﻿@page "/login"
+@inherits LoginBase
+
+<h3>Login</h3>
+
+<EditForm Model="User" OnSubmit="HandleLogin">
+
+    <label for ="username"> Användarnamn </label>
+    <InputText id = "username" @bind-Value="User.Username" />
+    <label for ="password"> Lösenord </label>
+    <InputText id ="password" @bind-Value="User.Password" type ="password"/>
+    <button type ="submit" class="btn btn-primary">
+        Logga in
+    </button>
+</EditForm>

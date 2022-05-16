@@ -1,0 +1,78 @@
+﻿@page "/addaccount"
+@inherits AddAccountBase
+@attribute [Authorize(Roles="Admin")]
+
+@if(AccountTypes ==null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+   <EditForm Model="@AccountModel" OnValidSubmit="HandleValidAccount">
+    <DataAnnotationsValidator/>
+
+    <h4> Lägg upp nytt konto för en kund </h4>
+    <hr />
+      <div class="row">
+        <label for = "Frequency" class ="col-sm-2 col-form-label" >
+            Frekvens
+        </label>
+        <div class ="col-sm-10">
+            <select id ="Frequency" @bind="AccountModel.Frequency"  class ="form-control" >
+            <option value=""></option>
+                @foreach(var frequency in Enum.GetValues(typeof(AccountFrequency)))
+            {
+                <option value = "@frequency" > @frequency </option>
+            }
+            </select>
+            <ValidationMessage For="@(() => AccountModel.Frequency)" />
+        </div>
+    </div>
+    <div class="row">
+        <label for = "AccountType" class ="col-sm-2 col-form-label" >
+            Kontotyp
+        </label>
+        <div class ="col-sm-10">
+            <select id ="AccountType" @bind="AccountModel.AccountTypesId"  class ="form-control" >
+            <option value=""></option>
+                @foreach(var accounttype in AccountTypes)
+            {
+                <option value = "@accounttype.AccountTypeId" > @accounttype.TypeName </option>
+            }
+            </select>
+            <ValidationMessage For="@(() => AccountModel.AccountTypesId)" />
+        </div>
+    </div>
+    <div class="row">
+        <label for = "CustomerId" class ="col-sm-2 col-form-label" >
+            KundId
+        </label>
+        <div class ="col-sm-10">
+            <InputNumber id ="CustomerId" class ="form-control" 
+                        @bind-Value="AccountModel.CustomerId" />
+            <ValidationMessage For="@(() => AccountModel.CustomerId)" />
+        </div>
+    </div>
+   <div class="row">
+        <label for = "DispositionType" class ="col-sm-2 col-form-label" >
+            Disponent
+        </label>
+        <div class ="col-sm-10">
+            <select id ="DispositionType" @bind="AccountModel.DispositionsType"  class ="form-control" >
+            <option value=""></option>
+                @foreach(var disponent in Enum.GetValues(typeof(DispositionType)))
+            {
+                <option value = "@disponent" > @disponent </option>
+            }
+            </select>
+            <ValidationMessage For="@(() => AccountModel.DispositionsType)" />
+        </div>
+    </div>
+
+    <button type = "submit" class = "btn btn-primary">
+        Skapa konto
+    </button>
+</EditForm>
+ 
+}
+

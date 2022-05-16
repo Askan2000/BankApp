@@ -1,0 +1,60 @@
+﻿@page "/maketransaction/{id}"
+@inherits MakeTransactionBase
+@attribute [Authorize(Roles ="Customer")]
+
+<h1>Gör överföring mellan konton</h1>
+<br />
+
+@if(Customer ==null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <EditForm Model="@NewTransaction" OnValidSubmit="HandelValidTransaction">
+        <DataAnnotationsValidator/>
+
+        <h4> Fyll i detaljer om överföringen </h4>
+        <hr />
+        <div class="row">
+            <label for = "SenderAccountId" class ="col-sm-2 col-form-label" >
+                Från kontonummer
+            </label>
+            <div class ="col-sm-10">
+                <select id ="SenderAccountId" @bind="NewTransaction.SenderAccountId"  class ="form-control" >
+                <option value=""></option>
+                    @foreach(var disposition in Customer.Dispositions)
+                {
+                    <option value = "@disposition.AccountId" > @disposition.AccountId </option>
+                }
+                </select>
+                <ValidationMessage For="@(() => NewTransaction.SenderAccountId)" />
+            </div>
+        </div>
+        <div class="row">
+            <label for = "RecieverAccountId" class ="col-sm-2 col-form-label" >
+                Till kontonummer
+            </label>
+            <div class ="col-sm-10">
+                <InputText id ="RecieverAccountId" class ="form-control" 
+                            @bind-Value="NewTransaction.RecieverAccountId" />
+                <ValidationMessage For="@(() => NewTransaction.RecieverAccountId)" />
+
+            </div>
+        </div>
+        <div class="row">
+            <label for = "Amount" class ="col-sm-2 col-form-label" >
+                Summa
+            </label>
+            <div class ="col-sm-10">
+                <InputText id ="Amount" class ="form-control" 
+                            @bind-Value="NewTransaction.Amount" />
+                <ValidationMessage For="@(() => NewTransaction.Amount)" />
+
+            </div>
+        </div>
+        <button type = "submit" class = "btn btn-primary">
+            Genomför transaktion
+        </button>
+    </EditForm>
+}

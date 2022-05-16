@@ -1,0 +1,15 @@
+﻿@inherits LoginLogoutButtonBase
+
+<AuthorizeView>
+    <Authorized>
+        <button  @onclick="Logout" class = "btn btn-primary" >
+            Logga ut
+        </button>
+    </Authorized>
+    <NotAuthorized>
+        <button  @onclick="Login" class = "btn btn-primary" >
+            Logga in
+        </button>
+    </NotAuthorized>
+
+</AuthorizeView>

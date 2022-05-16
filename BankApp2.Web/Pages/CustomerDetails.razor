@@ -1,0 +1,34 @@
+﻿@*@page "/customerdetails/{id}"
+
+@inherits CustomerDetailsBase
+
+<h3>CustomerDetails</h3>
+
+<div class = "row justify-content-center m-3">
+    <div class = "col-sm-8">
+        <div claas ="card">
+            <div class = "card-header">
+                <h1>  @Customer.Givenname </h1>
+            </div>
+
+            <div class = "card-body">
+
+                <h4> @Customer.City</h4>
+                <h4> @Customer.Gender</h4>
+                @foreach(var disposition in Customer.Dispositions)
+                {
+                    <p> DispositionID: @disposition.DispositionId</p>
+                    <p> AccountId: @disposition.AccountId</p>
+
+                }
+
+            </div>
+
+            <div class = "card-footer text-center">
+                <a href= "#" class = "btn btn-primary m-1"> Se konton </a> 
+                <a href= "/" class = "btn btn-primary m-1"> Tillbaka</a> 
+
+            </div>
+        </div>
+    </div>
+</div>*@

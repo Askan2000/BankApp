@@ -1,0 +1,48 @@
+﻿@page "/customerstartpage"
+@inherits CustomerStartPageBase
+@attribute [Authorize(Roles ="Customer")]
+
+
+@if(Customer ==null)
+{
+    
+    <div class="spinner"></div>
+}
+else
+{
+    <h1> Välkommen @Customer.Givenname</h1>
+
+    <button class = "btn btn-primary" @onclick = "@Button_Click_Balance">
+        @ButtonBalanceText
+    </button>
+    <button class = "btn btn-primary" @onclick = "@Button_Click_Transactions">
+        @ButtonTransactionsText
+    </button>
+    @foreach(var disposition in Customer.Dispositions)
+    {
+        <h4> Konto</h4>
+        <p> KontoId:  @disposition.AccountId</p>
+        <p> Kontotyp: @disposition.Type</p>
+        <p class = "@CssClassBalance"> Saldo: @disposition.Account.Balance </p>
+        <br />
+        
+        <table class = "@CssClassTransactions">
+            <tr>
+                <th> TransaktionsId</th>
+                <th> Datum</th>
+                <th> Summa</th>
+                <th> Saldo</th>
+            </tr>
+            @foreach (var transaction in @disposition.Account.Transactions)
+            {
+                <tr>
+                    <td> @transaction.TransactionId </td>
+                    <td> @transaction.Date </td>
+                    <td> @transaction.Amount </td>
+                    <td> @transaction.Balance </td>
+                </tr>                    
+            }
+        </table>
+    }
+}
+
