@@ -61,9 +61,11 @@ builder.Services.AddTransient<IAccountRepo, AccountRepo>();
 builder.Services.AddTransient<IAspNetUserService, AspNetUserService>();
 builder.Services.AddTransient<IAspNetUserRepo, AspNetUserRepo>();
 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
-//builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAccountTypeService, AccountTypeService>();
 builder.Services.AddTransient<IAccountTypeRepo, AccountTypeRepo>();
+builder.Services.AddTransient<IDispositionService, DispositionService>();
+builder.Services.AddTransient<IDispositionRepo, DispositionRepo>();
 
 //lägger på för att komma åt HttpContext i layers
 builder.Services.AddHttpContextAccessor();

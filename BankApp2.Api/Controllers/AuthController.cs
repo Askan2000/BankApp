@@ -33,7 +33,7 @@ namespace BankApp2.Api.Controllers
 
             if(user == null)
             {
-                BadRequest("Felktiga uppgifter");
+                return BadRequest("Felktiga uppgifter");
             }
             else
             {

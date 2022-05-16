@@ -1,0 +1,64 @@
+﻿@page "/addloan"
+@inherits AddLoanBase
+@attribute [Authorize(Roles ="Admin")]
+
+<EditForm Model="@Loan" OnValidSubmit="HandleValidLoan">
+    <DataAnnotationsValidator/>
+
+    <h4> Lägg upp nytt lån för en kund </h4>
+    <hr />
+    <div class="row">
+        <label for = "AccountId" class ="col-sm-2 col-form-label" >
+            KontoId
+        </label>
+        <div class ="col-sm-10">
+            <InputNumber id ="AccountId" class ="form-control" 
+                        @bind-Value="Loan.AccountId" />
+            <ValidationMessage For="@(() => Loan.AccountId)" />
+        </div>
+    </div>
+    <div class="row">
+        <label for = "Amount" class ="col-sm-2 col-form-label" >
+            Summa
+        </label>
+        <div class ="col-sm-10">
+            <InputNumber id ="Amount" class ="form-control" 
+                        @bind-Value="Loan.Amount" />
+            <ValidationMessage For="@(() => Loan.Amount)" />
+        </div>
+    </div>
+    <div class="row">
+        <label for = "Duration" class ="col-sm-2 col-form-label" >
+            Lånets längd
+        </label>
+        <div class ="col-sm-10">
+            <select id ="Duration" @bind="Loan.Duration"  class ="form-control" >
+            <option value=""></option>
+                @foreach(var duration in LoanDuration)
+            {
+                <option value = "@duration" > @duration </option>
+            }
+            </select>
+            <ValidationMessage For="@(() => Loan.Duration)" />
+        </div>
+    </div>
+         <div class="row">
+        <label for = "Status" class ="col-sm-2 col-form-label" >
+            Lånestatus
+        </label>
+        <div class ="col-sm-10">
+            <select id ="Status" @bind="Loan.Status"  class ="form-control" >
+            <option value=""></option>
+                @foreach(var status in Enum.GetValues(typeof(LoanStatus)))
+            {
+                <option value = "@status" > @status </option>
+            }
+            </select>
+            <ValidationMessage For="@(() => Loan.Status)" />
+        </div>
+    </div>
+    <button type = "submit" class = "btn btn-primary">
+        Lägg upp lån
+    </button>
+</EditForm>
+ 

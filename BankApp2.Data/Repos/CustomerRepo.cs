@@ -48,6 +48,9 @@ namespace BankApp2.Data.Repos
                     .Include(c => c.Dispositions)
                     .ThenInclude(d => d.Account)
                     .ThenInclude(a => a.Transactions)
+                    .Include(c => c.Dispositions)
+                    .ThenInclude(d => d.Account)
+                    .ThenInclude(a => a.AccountTypes)
                     .SingleOrDefaultAsync(c => c.CustomerId == id);
             }
             catch (Exception ex)

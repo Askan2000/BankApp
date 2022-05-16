@@ -20,6 +20,22 @@ namespace BankApp2.Data.Repos
             _db = db;
         }
 
+        public async Task<Account> CreateAccount(Account account)
+        {
+            try
+            {
+                var result = await _db.Accounts.AddAsync(account);
+                await _db.SaveChangesAsync();
+                return result.Entity;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<Account> GetAccount(int id)
         {
             return await _db.Accounts.FirstOrDefaultAsync( a => a.AccountId == id);

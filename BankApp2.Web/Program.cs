@@ -16,6 +16,7 @@ builder.Services.AddHttpClient<ICustomerWebService, CustomerWebService>();
 builder.Services.AddHttpClient<ITransactionWebService, TransactionWebService>();
 builder.Services.AddHttpClient<IAccountTypeWebService, AccountTypeWebService>();
 builder.Services.AddHttpClient<IAccountWebService, AccountWebService>();
+builder.Services.AddHttpClient<ILoanWebService, LoanWebService>();
 
 
 //Lägger till DI för authentication

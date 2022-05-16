@@ -1,5 +1,4 @@
 ﻿using BankApp2.Shared.Models;
-using BankApp2.Shared.ModelsNotInDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace BankApp2.Core.Interfaces
 {
-    public interface IAccountService
+    public interface IDispositionService
     {
-        Task<Account> CreateAccount(AccountModel accountDetails);
+        Task<Disposition> CreateDisposition(int CustomerId, int AccountId, string dispositionType);
     }
 }

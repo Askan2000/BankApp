@@ -20,9 +20,8 @@ else
     </button>
     @foreach(var disposition in Customer.Dispositions)
     {
-        <h4> Konto</h4>
         <p> KontoId:  @disposition.AccountId</p>
-        <p> Kontotyp: @disposition.Type</p>
+        <p> KontotypId: @disposition.Account.AccountTypesId</p>
         <p class = "@CssClassBalance"> Saldo: @disposition.Account.Balance </p>
         <br />
         
@@ -43,6 +42,7 @@ else
                 </tr>                    
             }
         </table>
+        <br/>
     }
 }
 

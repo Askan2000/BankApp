@@ -40,6 +40,8 @@ namespace BankApp2.Web.Pages
                 if(response != null)
                 {
                     Customer = response;
+
+                    
                 }
                 else
                 {
@@ -50,8 +52,6 @@ namespace BankApp2.Web.Pages
             {
                 _navigationManager.NavigateTo("Error");
             }
-
-            //Customer = await CustomerWebService.GetCustomer(int.Parse(Id));
         }
         protected void Button_Click_Balance()
         {
