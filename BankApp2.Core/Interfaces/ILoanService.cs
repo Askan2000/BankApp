@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace BankApp2.Core.Interfaces
 {
-    public interface IAccountService
+    public interface ILoanService
     {
-        Task<Account> CreateAccount(AccountModel accountDetails);
-        Task<Account> UpdateAccount(int accountId, decimal amount);
+        Task<Loan> CreateLoan(LoanDto loan);
     }
 }

@@ -41,7 +41,7 @@ namespace BankApp2.Data.Repos
             return await _db.Accounts.FirstOrDefaultAsync( a => a.AccountId == id);
         }
 
-        public async Task<Account> UpdateAccount(int accountId, decimal newBalance)
+        public async Task<Account> UpdateAccount(int accountId, decimal amount)
         {
             var result = await GetAccount(accountId);
 
@@ -50,7 +50,7 @@ namespace BankApp2.Data.Repos
                 result.Created = result.Created;
                 result.Frequency = result.Frequency;
                 result.AccountTypesId = result.AccountTypesId;
-                result.Balance = newBalance;
+                result.Balance = result.Balance + amount;
 
                 await _db.SaveChangesAsync();
 

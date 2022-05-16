@@ -1,4 +1,5 @@
 ﻿using BankApp2.Shared.Models;
+using BankApp2.Shared.ModelsNotInDB;
 using Newtonsoft.Json;
 
 namespace BankApp2.Web.WebServices
@@ -14,7 +15,7 @@ namespace BankApp2.Web.WebServices
             _httpClient = httpClient;
         }
 
-        public async Task<Loan> CreateLoan(Loan loan)
+        public async Task<Loan> CreateLoan(LoanDto loan)
         {
             var url = _baseUrl + "api/loan";
 

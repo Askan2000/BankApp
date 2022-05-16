@@ -20,9 +20,18 @@ namespace BankApp2.Data.Repos
         }
         public async Task<Transaction> GetTransaction(int accountId)
         {
-            var result = await _db.Transactions.Where(t => t.AccountId == accountId).OrderByDescending(x => x.Date).FirstAsync();
+            try
+            {
+                var result = await _db.Transactions.Where(t => t.AccountId == accountId).OrderByDescending(x => x.Date).FirstOrDefaultAsync();
+                
+                return result;
+            }
+            catch (Exception)
+            {
 
-            return result;
+                throw;
+            }
+            
         }
 
         public async Task<Transaction> PostTransaction(Transaction transaction)

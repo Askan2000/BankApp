@@ -58,12 +58,35 @@ namespace BankApp2.Core.Services
 
             //Uppdatera sedan balance på Account för både Sender och Reciever
 
-            var accountSender = await _accountRepo.UpdateAccount(senderTransaction.AccountId, senderTransaction.Balance);
-            var accountReciever = await _accountRepo.UpdateAccount(recieverTransaction.AccountId, recieverTransaction.Balance);
+            var accountSender = await _accountRepo.UpdateAccount(senderTransaction.AccountId, senderTransaction.Amount);
+            var accountReciever = await _accountRepo.UpdateAccount(recieverTransaction.AccountId, recieverTransaction.Amount);
 
             //Egentligen tokigt, här skickar jag bara tillbaka det inkommande objektet NewTransaction
             return transaction;
         }
+
+        public async Task<Transaction> CreateTransaction(int accountId, decimal amount, string transactionType, string transactionOperation)
+        {
+            Transaction transaction = new Transaction();
+            transaction.AccountId = accountId;
+            transaction.Date = DateTime.Now.Date;
+            transaction.Type = transactionType;
+            transaction.Operation = transactionOperation;
+            transaction.Amount = amount;
+
+            var latestTransaction = await _transactionRepo.GetTransaction(accountId);
+            if(latestTransaction == null)
+            {
+                transaction.Balance = amount;
+            }
+            else
+            {
+                transaction.Balance = latestTransaction.Balance + amount;
+            }
+
+            return await _transactionRepo.PostTransaction(transaction);
+        }
+
         public async Task<Transaction> GetTransaction(int accountId)
         {
             return await _transactionRepo.GetTransaction(accountId);

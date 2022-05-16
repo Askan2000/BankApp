@@ -2,7 +2,7 @@
 @inherits AddLoanBase
 @attribute [Authorize(Roles ="Admin")]
 
-<EditForm Model="@Loan" OnValidSubmit="HandleValidLoan">
+<EditForm Model="@LoanDto" OnValidSubmit="HandleValidLoan">
     <DataAnnotationsValidator/>
 
     <h4> Lägg upp nytt lån för en kund </h4>
@@ -13,8 +13,8 @@
         </label>
         <div class ="col-sm-10">
             <InputNumber id ="AccountId" class ="form-control" 
-                        @bind-Value="Loan.AccountId" />
-            <ValidationMessage For="@(() => Loan.AccountId)" />
+                        @bind-Value="LoanDto.AccountId" />
+            <ValidationMessage For="@(() => LoanDto.AccountId)" />
         </div>
     </div>
     <div class="row">
@@ -23,8 +23,8 @@
         </label>
         <div class ="col-sm-10">
             <InputNumber id ="Amount" class ="form-control" 
-                        @bind-Value="Loan.Amount" />
-            <ValidationMessage For="@(() => Loan.Amount)" />
+                        @bind-Value="LoanDto.Amount" />
+            <ValidationMessage For="@(() => LoanDto.Amount)" />
         </div>
     </div>
     <div class="row">
@@ -32,14 +32,14 @@
             Lånets längd
         </label>
         <div class ="col-sm-10">
-            <select id ="Duration" @bind="Loan.Duration"  class ="form-control" >
+            <select id ="Duration" @bind="LoanDto.Duration"  class ="form-control" >
             <option value=""></option>
                 @foreach(var duration in LoanDuration)
             {
                 <option value = "@duration" > @duration </option>
             }
             </select>
-            <ValidationMessage For="@(() => Loan.Duration)" />
+            <ValidationMessage For="@(() => LoanDto.Duration)" />
         </div>
     </div>
          <div class="row">
@@ -47,14 +47,14 @@
             Lånestatus
         </label>
         <div class ="col-sm-10">
-            <select id ="Status" @bind="Loan.Status"  class ="form-control" >
+            <select id ="Status" @bind="LoanDto.Status"  class ="form-control" >
             <option value=""></option>
                 @foreach(var status in Enum.GetValues(typeof(LoanStatus)))
             {
                 <option value = "@status" > @status </option>
             }
             </select>
-            <ValidationMessage For="@(() => Loan.Status)" />
+            <ValidationMessage For="@(() => LoanDto.Status)" />
         </div>
     </div>
     <button type = "submit" class = "btn btn-primary">

@@ -66,6 +66,9 @@ builder.Services.AddTransient<IAccountTypeService, AccountTypeService>();
 builder.Services.AddTransient<IAccountTypeRepo, AccountTypeRepo>();
 builder.Services.AddTransient<IDispositionService, DispositionService>();
 builder.Services.AddTransient<IDispositionRepo, DispositionRepo>();
+builder.Services.AddTransient<ILoanService, LoanService>();
+builder.Services.AddTransient<ILoanRepo, LoanRepo>();
+
 
 //lägger på för att komma åt HttpContext i layers
 builder.Services.AddHttpContextAccessor();

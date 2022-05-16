@@ -28,5 +28,10 @@ namespace BankApp2.Core.Services
 
             return await _accountRepo.CreateAccount(mappedAccount);
         }
+
+        public async Task<Account> UpdateAccount(int accountId, decimal amount)
+        {
+            return await _accountRepo.UpdateAccount(accountId, amount);
+        }
     }
 }
