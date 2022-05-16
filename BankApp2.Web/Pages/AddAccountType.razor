@@ -1,0 +1,46 @@
+﻿@page "/addaccounttype"
+@inherits AddAccountTypeBase
+@attribute [Authorize(Roles="Admin")]
+
+
+<EditForm Model="@AccountTypeDto" OnValidSubmit="HandleValidAccountType">
+    <DataAnnotationsValidator/>
+
+    <h4> Lägg upp en ny kontotyp </h4>
+    <div class="row">
+        <label for = "TypeName" class ="col-sm-2 col-form-label" >
+            Kontotyp (t ex sparkonto)
+        </label>
+        <div class ="col-sm-10">
+            <InputText id ="TypeName" class ="form-control" 
+                        @bind-Value="AccountTypeDto.TypeName" />
+            <ValidationMessage For="@(() => AccountTypeDto.TypeName)" />
+        </div>
+    </div>
+     <div class="row">
+        <label for = "Description" class ="col-sm-2 col-form-label" >
+            Beskrivning
+        </label>
+        <div class ="col-sm-10">
+            <InputText id ="Description" class ="form-control" 
+                        @bind-Value="AccountTypeDto.Description" />
+            <ValidationMessage For="@(() => AccountTypeDto.Description)" />
+        </div>
+    </div>
+     <div class="row">
+        <label for = "Interest" class ="col-sm-2 col-form-label" >
+            Ränta
+        </label>
+        <div class ="col-sm-10">
+            <InputNumber id ="Interest" class ="form-control" 
+                        @bind-Value="AccountTypeDto.Interest" />
+            <ValidationMessage For="@(() => AccountTypeDto.Interest)" />
+        </div>
+    </div>
+
+    <button type = "submit" class = "btn btn-primary">
+        Skapa konto
+    </button>
+</EditForm>
+ 
+

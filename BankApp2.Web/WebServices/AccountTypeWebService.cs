@@ -1,4 +1,6 @@
 ﻿using BankApp2.Shared.Models;
+using BankApp2.Shared.ModelsNotInDB;
+using Newtonsoft.Json;
 
 namespace BankApp2.Web.WebServices
 {
@@ -12,6 +14,32 @@ namespace BankApp2.Web.WebServices
         {
             _httpClient = httpClient;
         }
+
+        public async Task<AccountType> CreateAccountType(AccountTypeDto accountType)
+        {
+            var url = _baseUrl + "api/accounttype";
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync(url, accountType);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonReturn = await response.Content.ReadAsStringAsync();
+
+                    AccountType newAccountType = JsonConvert.DeserializeObject<AccountType>(jsonReturn);
+
+                    return newAccountType;
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<AccountType>> GetAccountTypes()
         {
             var url = _baseUrl + "api/accounttype/";

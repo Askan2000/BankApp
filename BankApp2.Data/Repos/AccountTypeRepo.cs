@@ -18,6 +18,22 @@ namespace BankApp2.Data.Repos
         {
             _db = db;
         }
+
+        public async Task<AccountType> CreateAccountType(AccountType accountType)
+        {
+            try
+            {
+                var result = await _db.AccountTypes.AddAsync(accountType);
+                await _db.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<AccountType>> GetAccountTypes()
         {
             try

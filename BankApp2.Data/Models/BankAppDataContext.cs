@@ -25,7 +25,6 @@ namespace BankApp2.Data.Models
         public virtual DbSet<Loan> Loans { get; set; } = null!;
         public virtual DbSet<Transaction> Transactions { get; set; } = null!;
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
@@ -49,6 +48,8 @@ namespace BankApp2.Data.Models
                 entity.Property(e => e.Description)
                     .HasMaxLength(500)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Interest).HasColumnType("decimal(13, 2)");
 
                 entity.Property(e => e.TypeName)
                     .HasMaxLength(50)
