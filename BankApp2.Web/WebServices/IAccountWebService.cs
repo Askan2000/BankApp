@@ -6,6 +6,7 @@ namespace BankApp2.Web.WebServices
     public interface IAccountWebService
     {
         Task<Account> AddAccount(AccountModel accountModel);
+        Task<Account> GetAccount(int accountId);
 
     }
 }

@@ -33,8 +33,7 @@ namespace BankApp2.Web.WebServices
 
             catch (Exception)
             {
-
-                throw;
+                return null;
             }
         }
 
@@ -55,15 +54,13 @@ namespace BankApp2.Web.WebServices
             //var responseStatusCode = response.StatusCode;
 
             try
-            {
-                
+            {          
                 return await _httpClient.GetFromJsonAsync<Customer>(url);
             }
 
             catch (Exception)
             {
-
-                throw;
+                return null;
             }
         }   
 
@@ -74,10 +71,7 @@ namespace BankApp2.Web.WebServices
             {
                 //HttpResponseMessage response = await _httpClient.GetAsync(url);
 
-
-                return await _httpClient.GetFromJsonAsync<Customer[]>(url);
-
-                
+                return await _httpClient.GetFromJsonAsync<Customer[]>(url);         
 
                 //response.EnsureSuccessStatusCode();
 
@@ -89,7 +83,6 @@ namespace BankApp2.Web.WebServices
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -110,9 +103,6 @@ namespace BankApp2.Web.WebServices
                 return newCustomer;
             }
             return null;
-
-
-
         }
 
         public async Task<bool> GetAspNetAccountByUserName(string userName)
@@ -121,7 +111,6 @@ namespace BankApp2.Web.WebServices
             try
             {
                 return await _httpClient.GetFromJsonAsync<bool>(url);
-
             }
             catch (Exception)
             {

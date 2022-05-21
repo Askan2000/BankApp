@@ -12,16 +12,30 @@ namespace BankApp2.Web.Pages
         [Inject]
         public ILoanWebService LoanWebService { get; set; }
         [Inject]
+        public IAccountWebService AccountWebService { get; set; }
+        [Inject]
         public NavigationManager NavigationManager { get; set; }
+        public string AddLoanMessage { get; set; } = "";
 
-        protected async void HandleValidLoan()
+        protected async Task HandleValidLoan()
         {
-            var result = await LoanWebService.CreateLoan(LoanDto);
+            //kolla om kontonumret finns först
+            var accountExists = await AccountWebService.GetAccount(LoanDto.AccountId);
 
-            if (result != null)
+            if(accountExists != null)
             {
-                NavigationManager.NavigateTo("SuccesfullLoanRegistration");
+                var result = await LoanWebService.CreateLoan(LoanDto);
+
+                if (result != null)
+                {
+                    NavigationManager.NavigateTo("SuccesfullLoanRegistration");
+                }
             }
+            else
+            {
+                AddLoanMessage = "Ett konto med det angivna kontonumret finns inte upplagt, försök med ett annat kontonummer";
+            }
+            
         }
     }
 }

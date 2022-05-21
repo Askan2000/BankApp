@@ -9,7 +9,7 @@ namespace BankApp2.Data.Interfaces
 {
     public interface IAccountRepo
     {
-        Task<Account> GetAccount(int id);
+        Task<Account> GetAccount(int accountId);
         Task<Account> CreateAccount (Account account);
         Task<Account> UpdateAccount (int accountId, decimal amount);
     }

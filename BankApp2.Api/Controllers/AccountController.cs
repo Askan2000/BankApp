@@ -56,6 +56,24 @@ namespace BankApp2.Api.Controllers
             }
             
          }
-        
+        [HttpGet("{accountId}")]
+        public async Task<ActionResult<Account>> GetAccount(int accountId)
+        {
+            try
+            {
+                var result = await _accountService.GetAccount(accountId);
+                if(result != null)
+                {
+                    return Ok(result);
+                }
+                return BadRequest("Gick inte att hämta konto");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
     }
 }

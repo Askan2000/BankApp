@@ -12,5 +12,6 @@ namespace BankApp2.Core.Interfaces
     {
         Task<Account> CreateAccount(AccountModel accountDetails);
         Task<Account> UpdateAccount(int accountId, decimal amount);
+        Task<Account> GetAccount(int accountId);
     }
 }

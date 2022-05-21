@@ -39,6 +39,19 @@ namespace BankApp2.Core.Services
             }        
         }
 
+        public async Task<Account> GetAccount(int accountId)
+        {
+            try
+            {
+                return await _accountRepo.GetAccount(accountId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetAccount)} service method {ex} ");
+                throw;
+            }
+        }
+
         public async Task<Account> UpdateAccount(int accountId, decimal amount)
         {
             try

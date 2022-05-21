@@ -15,7 +15,7 @@ namespace BankApp2.Shared.ModelsNotInDB
         public decimal Balance { get; set; } = 0;
         public int AccountTypesId { get; set; } = 1;
         [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "ANge ett giltigt kundnummer")]
+        [Range(1, int.MaxValue, ErrorMessage = "Ange ett giltigt kundnummer")]
         public int CustomerId { get; set; }
         [Required]
         public string DispositionsType { get; set; } = string.Empty;

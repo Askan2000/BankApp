@@ -39,5 +39,20 @@ namespace BankApp2.Web.WebServices
                 throw;
             }
         }
+        
+        public async Task<Account> GetAccount(int accountId)
+        {
+            var url = _baseUrl + "api/account/" + accountId;
+
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<Account>(url);
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
     }
 }
