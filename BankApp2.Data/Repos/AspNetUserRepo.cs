@@ -27,25 +27,18 @@ namespace BankApp2.Data.Repos
         }
 
         public async Task<IdentityResult> CreateIdentityAccount(ApplicationUser user, string password, string role)
-        {
-            try
+        {           
+            var result = await _userManager.CreateAsync(user, password);
+            if(result.Succeeded)
             {
-                var result = await _userManager.CreateAsync(user, password);
-                if(result.Succeeded)
+                var resultRole = await _userManager.AddToRoleAsync(user, role);
+                if(resultRole.Succeeded)
                 {
-                    var resultRole = await _userManager.AddToRoleAsync(user, role);
-                    if(resultRole.Succeeded)
-                    {
-                        return resultRole;
-                    }
-                    
+                    return resultRole;
                 }
-                return result;
+                    
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            return result;
         }
 
         public async Task<IList<string>> GetIdentityRole(ApplicationUser user)
@@ -53,9 +46,9 @@ namespace BankApp2.Data.Repos
             return await _userManager.GetRolesAsync(user);
         }
 
-        public async Task<ApplicationUser> GetIdentityUser(UserLoginDto user)
+        public async Task<ApplicationUser> GetIdentityUser(string userName)
         {
-            return await _userManager.FindByNameAsync(user.Username);
+            return await _userManager.FindByNameAsync(userName);
         }
 
         public async Task<string> GetIdentityUserId(ApplicationUser user)

@@ -1,4 +1,11 @@
-﻿@page "/customerSuccesfullyCreated"
+﻿@page "/customerSuccesfullyCreated/{CustomerId}"
 @attribute [Authorize(Roles ="Admin")]
 
-<h3>Kunden är upplagd i systemet och kan logga in med användarnamn och lösenord</h3>
+<h3>Kunden är upplagd i systemet med kundnummer @CustomerId och kan logga in med användarnamn och lösenord</h3>
+
+
+@code{
+
+    [Parameter]
+    public string CustomerId { get; set; }
+}

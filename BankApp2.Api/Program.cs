@@ -28,11 +28,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
  .AddDefaultTokenProviders();
 
 
-//Först talar vi om att vi skall använda authentication och att det skall vara via JWT
+////Först talar vi om att vi skall använda authentication och att det skall vara via JWT
+
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
 })
    //Sedan sätter vi upp hur JWT skall fungera
    .AddJwtBearer(opt =>
@@ -51,6 +54,18 @@ builder.Services.AddAuthentication(opt =>
 
        };
    });
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+    builder =>
+    {
+        builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+    });
+});
+
 
 //Lägger på möjlighet för DI för mina interfejses
 builder.Services.AddTransient<ICustomerService, CustomerService>();
@@ -71,7 +86,7 @@ builder.Services.AddTransient<ILoanRepo, LoanRepo>();
 
 
 //lägger på för att komma åt HttpContext i layers
-builder.Services.AddHttpContextAccessor();
+//builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers()
 .AddJsonOptions(options =>
@@ -96,6 +111,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();

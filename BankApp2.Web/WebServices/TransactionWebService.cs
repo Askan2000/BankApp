@@ -1,4 +1,5 @@
-﻿using BankApp2.Shared.ModelsNotInDB;
+﻿using BankApp2.Shared.Models;
+using BankApp2.Shared.ModelsNotInDB;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -29,9 +30,23 @@ namespace BankApp2.Web.WebServices
                 return returnedTransaction;
             }
             return null;
+        }
 
-            
+        public async Task<Transaction> GetTransaction(int accountId)
+        {
+            var url = _baseUrl + "api/transaction/" + accountId;
 
+            try
+            {
+                var result = await _httpClient.GetFromJsonAsync<Transaction>(url);
+
+                return result;
+            }
+
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

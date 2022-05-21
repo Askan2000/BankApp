@@ -40,8 +40,6 @@ namespace BankApp2.Web.Pages
                 if(response != null)
                 {
                     Customer = response;
-
-                    
                 }
                 else
                 {

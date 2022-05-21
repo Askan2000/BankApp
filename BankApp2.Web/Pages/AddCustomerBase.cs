@@ -13,15 +13,29 @@ namespace BankApp2.Web.Pages
         public NavigationManager NavigationManager { get; set; }
 
         public UserRegisterDto User { get; set; } = new UserRegisterDto();
+        [Parameter]
+        public string AddCustomerMessage { get; set; } = "";
 
-        public async void HandleValidUser()
+        public async Task HandleValidUser()
         {
-            var result = await CustomerWebService.CreateCustomer(User);
+            //Kolla om användarnamnet redan finns i AspNetIdentity-databasen
+            var userNameExists = await CustomerWebService.GetAspNetAccountByUserName(User.Username);
 
-            if (result != null)
+            //Om Username inte redan är upptaget, skapa kontot
+            if(!userNameExists)
             {
-                NavigationManager.NavigateTo("/customerSuccesfullyCreated");
+                var result = await CustomerWebService.CreateCustomer(User);
+
+                if (result != null)
+                {
+                    NavigationManager.NavigateTo($"/customerSuccesfullyCreated/{result.CustomerId}");
+                }
             }
+            else
+            {
+                AddCustomerMessage = "Användarnamnet är redan upptaget";
+            }
+            
         }
     }
 }

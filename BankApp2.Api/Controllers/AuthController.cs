@@ -2,6 +2,7 @@
 using BankApp2.Data.ModelsIdentity;
 using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -27,102 +28,106 @@ namespace BankApp2.Api.Controllers
             _jwtTokenService = jwtTokenService;
         }
 
+        //[Authorize(Roles ="Admin")]
         [HttpPost("register")]
         public async Task<ActionResult<Customer>> Register (UserRegisterDto user)
         {
-
-            if(user == null)
+            try
             {
-                return BadRequest("Felktiga uppgifter");
-            }
-            else
-            {
-                var result = await _aspNetUserService.CreateIdentityAccount(user);
-
-                if(result != null)
+                if (user == null)
                 {
-                    //Om det gick bra att skapa AspNetUsern vill jag hämta upp denna och lägga in en Customer med AspNetUserId:et på
-                    var aspNetUserId = await _aspNetUserService.GetIdentityUserId(result);
+                    return BadRequest("Felktiga uppgifter");
+                }
+                else
+                {
+                    var result = await _aspNetUserService.CreateIdentityAccount(user);
 
-                    if(aspNetUserId != null)
+                    if (result != null)
                     {
-                        var resultCustomer = await _customerService.AddCustomer(user, aspNetUserId);
+                        //Om det gick bra att skapa AspNetUsern vill jag hämta upp denna och lägga in en Customer med AspNetUserId:et på
+                        var aspNetUserId = await _aspNetUserService.GetIdentityUserId(result);
 
-                        if(resultCustomer != null)
+                        if (aspNetUserId != null)
                         {
-                            return Ok(resultCustomer);
+                            var resultCustomer = await _customerService.AddCustomer(user, aspNetUserId);
+
+                            if (resultCustomer != null)
+                            {
+                                return Ok(resultCustomer);
+                            }
+                            else
+                            {
+                                return BadRequest("Gick inte att skapa Customer");
+                            }
                         }
                         else
                         {
-                            return BadRequest("Gick inte att skapa Customer");
+                            return BadRequest("Gick inte att hämta AspNetUserId");
                         }
                     }
                     else
                     {
-                        return BadRequest("Gick inte att hämta AspNetUserId");
+                        return BadRequest("Gick inte att skapa AspNetUser");
                     }
-                }
-                else
-                {
-                    return BadRequest("Gick inte att skapa AspNetUser");
-                }
+                }   
             }
-            return BadRequest("Något gick fel"); 
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }       
         }
 
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLoginDto user)
         {
-            //Kolla via login-in-manager om usern finns, ändra sen nedan
-
-            if(user == null)
+            try
             {
-                return BadRequest("Felaktiga inloggningsuppgifter");
-            }
-            else
-            {
-                //prova att logga in användaren i Identity
-
-                var result = await _aspNetUserService.LoginIdentityAccount(user);
-                
-                if(result != null)
+                if (user == null)
                 {
-                    string token =  await _jwtTokenService.CreateJwtToken(user);
-                    return Ok(token);
-
+                    return BadRequest("Felaktiga inloggningsuppgifter");
                 }
-                return null;
+                else
+                {
+                    //prova att logga in användaren i Identity
+                    var result = await _aspNetUserService.LoginIdentityAccount(user);
+
+                    if (result != null)
+                    {
+                        string token = await _jwtTokenService.CreateJwtToken(user);
+                        return Ok(token);
+                    }
+                    return BadRequest("Gick inte att logga in användaren");
+                }
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Internal Server error");
+            } 
+        }
+
+        [HttpGet("{userName}")]
+        public async Task<ActionResult<bool>> CheckIdentityUserExists(string userName)
+        {
+            try
+            {
+                var result = await _aspNetUserService.CheckIdentityUserExists(userName);
+                if (!result)
+                {
+                    return NotFound("Användarnamnet fanns inte registrerat sedan tidigare");
+                }
+                else
+                {
+                    return Ok(result);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Fel vid hämtande av kund från DB");
             }
         }
 
-        //private string CreateToken(UserLoginDto user)
-        //{
-
-        //    //Här vill jag lägga till att användaren är en viss roll
-        //    //kan göras via Identity.Roles - först hämta upp vilkan roll personen har i Identity som den fick vid registrering
-        //    //sen sätter jag claimTypes.Role till userns role
-
-        //    List<Claim> claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimTypes.Name, user.Username)
-        //    };
-
-        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWTkey"]));
-            
-        //    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        //    var tokenOptions = new JwtSecurityToken(
-
-        //        issuer: "http://localhost:7019",
-        //        audience: "http://localhost:7019",
-        //        claims: claims, //Här läggs vilken behörighet man har
-        //        expires: DateTime.Now.AddMinutes(20), //Hur länge en token skall gälla
-        //        signingCredentials: credentials);
-
-        //    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-
-        //    return tokenString;
-        //}
     }
 }

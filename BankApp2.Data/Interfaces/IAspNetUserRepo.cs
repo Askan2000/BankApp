@@ -14,7 +14,7 @@ namespace BankApp2.Data.Interfaces
         Task<IdentityResult> CreateIdentityAccount(ApplicationUser user, string password, string role);
         Task<string> GetIdentityUserId(ApplicationUser user);
         Task<ApplicationUser> LoginIdentityAccount(ApplicationUser user, string password);
-        Task<ApplicationUser> GetIdentityUser(UserLoginDto user);
+        Task<ApplicationUser> GetIdentityUser(string userName);
         Task<IList<string>> GetIdentityRole(ApplicationUser user);
 
     }

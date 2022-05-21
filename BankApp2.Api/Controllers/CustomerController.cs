@@ -1,5 +1,6 @@
 ﻿using BankApp2.Core.Interfaces;
 using BankApp2.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,34 +10,19 @@ namespace BankApp2.Api.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerService _service;
+        private readonly ICustomerService _customerService;
 
         public CustomerController(ICustomerService service)
         {
-            _service = service;
+            _customerService = service;
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
-        {
 
-            try
-            {
-                return Ok(await _service.GetAllCustomers());
-
-            }
-            catch (Exception)
-            {
-
-                return NotFound();
-            }
-        }
         [HttpGet("{customerId:int}")]
         public async Task<ActionResult<Customer>> GetCustomer(int customerId)
         {
-
             try
             {
-                var result = await _service.GetCustomer(customerId);
+                var result = await _customerService.GetCustomer(customerId);
                 if (result == null)
                 {
                     return NotFound();
@@ -45,23 +31,22 @@ namespace BankApp2.Api.Controllers
                 {
                     return Ok(result);
                 }
-
             }
             catch (Exception)
             {
-
                     return StatusCode(StatusCodes.Status500InternalServerError, 
                         "Fel vid hämtande av kund från DB");
-
             }
         }
+
+        //[Authorize]
         [HttpGet("identity/{aspNetId}")]
         public async Task<ActionResult<Customer>> GetCustomerByAspNetId(string aspNetId)
         {
 
             try
             {
-                var result = await _service.GetCustomerByAspNetId(aspNetId);
+                var result = await _customerService.GetCustomerByAspNetId(aspNetId);
                 if (result == null)
                 {
                     return NotFound();
@@ -70,41 +55,12 @@ namespace BankApp2.Api.Controllers
                 {
                     return Ok(result);
                 }
-
             }
             catch (Exception)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Fel vid hämtande av kund från DB");
-
             }
         }
-        //[HttpPost]
-        //public async Task<ActionResult<Customer>> CreateCustomer(Customer customer)
-        //{
-        //    try
-        //    {
-        //        if (customer != null)
-        //        {
-        //            var createdCustomer = await _service.AddCustomer(customer);
-
-        //            return Ok(createdCustomer);
-        //            //return CreatedAtAction(nameof(GetCustomer),
-        //            //    new { id = createdCustomer.CustomerId }, createdCustomer);
-        //        }
-        //        else
-        //        {
-        //            return BadRequest();
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        return StatusCode(StatusCodes.Status500InternalServerError, 
-        //            "Fel i registrering av ny kund");
-        //    }
-
-        //}
     }
 }

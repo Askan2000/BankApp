@@ -10,5 +10,6 @@ namespace BankApp2.Web.WebServices
         Task<Customer> GetCustomer(int id);
         Task<Customer> GetCustomerByAspNetId(string apNetId);
         Task<Customer> CreateCustomer(UserRegisterDto customerDetails);
+        Task<bool> GetAspNetAccountByUserName(string userName);
     }
 }

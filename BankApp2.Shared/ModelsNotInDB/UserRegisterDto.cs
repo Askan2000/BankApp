@@ -12,11 +12,15 @@ namespace BankApp2.Shared.ModelsNotInDB
         [Required]
         public string Username { get; set; } = string.Empty;
         [Required]
+        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [RegularExpression(@"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)).+$")]
         public string Password { get; set; } = string.Empty;
         [Required]
+        [EmailAddress(ErrorMessage = "Fel format på email")]
+
         public string Email { get; set; } = string.Empty;
         [Required]
-        public string Gender { get; set; } = string.Empty;
+        public string Gender { get; set; }
         [Required]
         public string Givenname { get; set; } = string.Empty;
         [Required]

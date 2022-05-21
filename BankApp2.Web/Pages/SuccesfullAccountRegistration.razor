@@ -1,4 +1,10 @@
-﻿@page "/SuccesfullAccountRegistration"
+﻿@page "/SuccesfullAccountRegistration/{accountId}"
 @attribute [Authorize(Roles = "Admin")]
 
-<h3>Kontot är skapat</h3>
+<h3>Kontot är skapat med kontonummer @AccountId</h3>
+
+@code{
+
+    [Parameter]
+    public string AccountId { get; set; }
+}

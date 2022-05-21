@@ -1,6 +1,7 @@
 ﻿using BankApp2.Core.Interfaces;
 using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace BankApp2.Api.Controllers
             _accountTypeService = accountTypeService;
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AccountType>>> GetAccountTypes()
         {
@@ -30,6 +32,8 @@ namespace BankApp2.Api.Controllers
                 return NotFound("Inga kontotyper hittades");
             }
         }
+
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<AccountType>> CreateTransaction(AccountTypeDto accountType)
         {

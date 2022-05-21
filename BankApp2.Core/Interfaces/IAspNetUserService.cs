@@ -14,5 +14,6 @@ namespace BankApp2.Core.Interfaces
         Task<ApplicationUser> CreateIdentityAccount(UserRegisterDto user);
         Task<string> GetIdentityUserId(ApplicationUser user);
         Task<ApplicationUser> LoginIdentityAccount(UserLoginDto user);
+        Task<bool> CheckIdentityUserExists(string userName);
     }
 }

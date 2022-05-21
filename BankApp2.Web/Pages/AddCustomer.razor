@@ -4,12 +4,13 @@
 
 <h3>Lägg upp ny kund</h3>
 
-
 <EditForm Model="@User" OnValidSubmit="HandleValidUser">
     <DataAnnotationsValidator/>
 
     <h4> Fyll i kundens uppgifter </h4>
     <hr />
+     <p style="color:red">@AddCustomerMessage</p>
+    <br />
     <div class="row">
         <label for = "Username" class ="col-sm-2 col-form-label" >
             Användarnamn
@@ -145,4 +146,3 @@
         Skapa konto
     </button>
 </EditForm>
-

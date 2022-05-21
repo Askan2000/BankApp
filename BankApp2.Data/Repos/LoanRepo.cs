@@ -20,17 +20,9 @@ namespace BankApp2.Data.Repos
 
         public async Task<Loan> CreateLoan(Loan loan)
         {
-            try
-            {
-                var result = await _db.Loans.AddAsync(loan);
-                await _db.SaveChangesAsync();
-                return result.Entity;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            var result = await _db.Loans.AddAsync(loan);
+            await _db.SaveChangesAsync();
+            return result.Entity;
         }
     }
 }

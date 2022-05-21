@@ -3,6 +3,7 @@ using BankApp2.Core.Interfaces;
 using BankApp2.Data.Interfaces;
 using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,35 +16,69 @@ namespace BankApp2.Core.Services
     {
         private readonly ICustomerRepo _repo;
         private readonly IMapper _mapper;
+        private readonly ILogger<CustomerService> _logger;
 
-        public CustomerService(ICustomerRepo repo, IMapper mapper)
+        public CustomerService(ICustomerRepo repo, IMapper mapper, ILogger<CustomerService> logger)
         {
             _repo = repo;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Customer> AddCustomer(UserRegisterDto user, string aspNetUserId)
         {
-            //Customer customer = new Customer();
-            var mappedCustomer = _mapper.Map<Customer>(user);
-            mappedCustomer.AspNetUserId = aspNetUserId;
+            try
+            {
+                var mappedCustomer = _mapper.Map<Customer>(user);
+                mappedCustomer.AspNetUserId = aspNetUserId;
 
-            return await _repo.AddCustomer(mappedCustomer);
+                return await _repo.AddCustomer(mappedCustomer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(AddCustomer)} service method {ex} ");
+                throw;
+            }
+            
         }
 
         public async Task<IEnumerable<Customer>> GetAllCustomers()
         {
-            return await _repo.GetAllCustomers();
+            try
+            {
+                return await _repo.GetAllCustomers();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetAllCustomers)} service method {ex} ");
+                throw;
+            }
         }
 
         public async Task<Customer> GetCustomer(int id)
         {
-            return await _repo.GetCustomer(id);
+            try
+            {
+                return await _repo.GetCustomer(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetCustomer)} service method {ex} ");
+                throw;
+            }
         }
 
         public async Task<Customer> GetCustomerByAspNetId(string aspNetId)
         {
-            return await _repo.GetCustomerByAspNetId(aspNetId);
+            try
+            {
+                return await _repo.GetCustomerByAspNetId(aspNetId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetCustomerByAspNetId)} service method {ex} ");
+                throw;
+            }
         }
     }
 }

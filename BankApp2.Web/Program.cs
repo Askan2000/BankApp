@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7019/") });
+
 //Vi behöver berätta att vi ska kunna injecta IcustomerService i index.razor
 builder.Services.AddHttpClient<ICustomerWebService, CustomerWebService>();
 builder.Services.AddHttpClient<ITransactionWebService, TransactionWebService>();
@@ -39,8 +41,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-app.Run();
+app.Run();  

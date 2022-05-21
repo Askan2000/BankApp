@@ -20,32 +20,41 @@ namespace BankApp2.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Account>> Post(AccountModel account)
+        public async Task<ActionResult<Account>> Register(AccountModel account)
         {
-            if(account == null)
+            try
             {
-                return BadRequest("Felaktiga kontouppgifter");
-            }
-            var returnedAccount = await _accountService.CreateAccount(account);
-            if(returnedAccount != null)
-            {
-                var returnedDisposition = await _dispositionService.CreateDisposition(
-                    account.CustomerId, returnedAccount.AccountId, account.DispositionsType);
-
-                if( returnedDisposition != null )
+                if (account == null)
                 {
-                    return Ok(returnedAccount);
+                    return BadRequest("Felaktiga kontouppgifter");
+                }
+                var returnedAccount = await _accountService.CreateAccount(account);
+                if (returnedAccount != null)
+                {
+                    var returnedDisposition = await _dispositionService.CreateDisposition(
+                        account.CustomerId, returnedAccount.AccountId, account.DispositionsType);
+
+                    if (returnedDisposition != null)
+                    {
+                        return Ok(returnedAccount);
+                    }
+                    else
+                    {
+                        return BadRequest("Gick inte att skapa disposition");
+                    }
                 }
                 else
                 {
-                    return BadRequest("Gick inte att skapa disposition");
+                    return BadRequest("Gick inte att skapa konto");
                 }
-            }
-            else
-            {
-                return BadRequest("Gick inte att skapa konto");
-            }
 
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Internal server error");    
+            }
+            
          }
         
     }

@@ -8,17 +8,17 @@ namespace BankApp2.Web.Models
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
-        private readonly ISessionStorageService _localStorage;
+        private readonly ISessionStorageService _sessionStorage;
         private readonly HttpClient _http;
 
-        public CustomAuthStateProvider(ISessionStorageService localStorage, HttpClient http)
+        public CustomAuthStateProvider(ISessionStorageService sessionStorage, HttpClient http)
         {
-            _localStorage = localStorage;
+            _sessionStorage = sessionStorage;
             _http = http;
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string token = await _localStorage.GetItemAsStringAsync("token");
+            string token = await _sessionStorage.GetItemAsStringAsync("token");
 
             var identity = new ClaimsIdentity();
             _http.DefaultRequestHeaders.Authorization = null;
@@ -29,7 +29,7 @@ namespace BankApp2.Web.Models
             {
                 identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
                 _http.DefaultRequestHeaders.Authorization = 
-                    new AuthenticationHeaderValue("Bearer", token.Replace("\"",""));
+                    new AuthenticationHeaderValue("Bearer", token.Replace("\"", ""));
             }
 
 

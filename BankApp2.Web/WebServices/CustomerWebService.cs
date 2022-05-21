@@ -1,6 +1,7 @@
 ﻿using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace BankApp2.Web.WebServices
 {
@@ -9,10 +10,16 @@ namespace BankApp2.Web.WebServices
         private readonly string _baseUrl = "https://localhost:7019/";
 
         private readonly HttpClient _httpClient;
+        private readonly ISessionStorageService _sessionStorage;
 
-        public CustomerWebService(HttpClient httpClient)
+
+        public CustomerWebService(HttpClient httpClient, ISessionStorageService sessionStorage)
         {
+            httpClient.BaseAddress = new Uri("https://localhost:7019/");
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "BlazorServer");
+
             _httpClient = httpClient;
+            _sessionStorage = sessionStorage;
         }
 
         public async Task<Customer> GetCustomer(int id)
@@ -33,10 +40,23 @@ namespace BankApp2.Web.WebServices
 
         public async Task<Customer> GetCustomerByAspNetId(string aspNetId)
         {
-            var url = _baseUrl + "api/customer/identity/" + aspNetId;
+            var url = "api/customer/identity/" + aspNetId;
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            var token1 = await _sessionStorage.GetItemAsync<string>("token");
+
+            var token2 = token1.Replace("\"","");
+
+            //requestMessage.Headers.Authorization = 
+            //    new AuthenticationHeaderValue("Bearer", token2);
+                
+            //var response = await _httpClient.SendAsync(requestMessage);
+
+            //var responseStatusCode = response.StatusCode;
 
             try
             {
+                
                 return await _httpClient.GetFromJsonAsync<Customer>(url);
             }
 
@@ -45,7 +65,7 @@ namespace BankApp2.Web.WebServices
 
                 throw;
             }
-        }
+        }   
 
         public async Task<IEnumerable<Customer>> GetCustomers()
         {
@@ -93,6 +113,20 @@ namespace BankApp2.Web.WebServices
 
 
 
+        }
+
+        public async Task<bool> GetAspNetAccountByUserName(string userName)
+        {
+            var url = _baseUrl + "api/auth/" + userName;
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<bool>(url);
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

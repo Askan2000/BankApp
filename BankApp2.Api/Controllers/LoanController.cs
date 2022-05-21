@@ -2,13 +2,16 @@
 using BankApp2.Shared.Enums;
 using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankApp2.Api.Controllers
 {
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
+    
     public class LoanController : ControllerBase
     {
         private readonly ILoanService _loanService;
@@ -23,36 +26,45 @@ namespace BankApp2.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Loan>> Post(LoanDto loan)
+        public async Task<ActionResult<Loan>> CreateLoan(LoanDto loan)
         {
-            if (loan == null)
+            try
             {
-                return BadRequest("Felaktiga låneuppgifter");
-            }
-            var returnedLoan = await _loanService.CreateLoan(loan);
-            if (returnedLoan != null)
-            {
-                //Om lånet är korrekt upplagt ska samma Amount sättas in på kundens AccountId
-                var returnedAccount = await _accountService.UpdateAccount(loan.AccountId, loan.Amount);
-
-                if (returnedAccount != null)
+                if (loan == null)
                 {
-                    //Om uppdateringen av kontosaldot gick bra lägger jag in en transaktion med samma summa 
+                    return BadRequest("Felaktiga låneuppgifter");
+                }
+                var returnedLoan = await _loanService.CreateLoan(loan);
+                if (returnedLoan != null)
+                {
+                    //Om lånet är korrekt upplagt ska samma Amount sättas in på kundens AccountId
+                    var returnedAccount = await _accountService.UpdateAccount(loan.AccountId, loan.Amount);
 
-                    var transactionOperation = "Loan";
-                    var returnedTransaction = await _transactionService.CreateTransaction(
-                        loan.AccountId, loan.Amount, TransactionTypeEnum.Credit.ToString(), transactionOperation);
-                    return Ok(loan);
+                    if (returnedAccount != null)
+                    {
+                        //Om uppdateringen av kontosaldot gick bra lägger jag in en transaktion med samma summa 
+
+                        var transactionOperation = "Loan";
+                        var returnedTransaction = await _transactionService.CreateTransaction(
+                            loan.AccountId, loan.Amount, TransactionTypeEnum.Credit.ToString(), transactionOperation);
+                        return Ok(loan);
+                    }
+                    else
+                    {
+                        return BadRequest("Gick inte att skapa disposition");
+                    }
                 }
                 else
                 {
-                    return BadRequest("Gick inte att skapa disposition");
+                    return BadRequest("Gick inte att skapa konto");
                 }
             }
-            else
+            catch (Exception)
             {
-                return BadRequest("Gick inte att skapa konto");
+
+                return StatusCode(500, "Internal Server error");
             }
+            
 
         }
     }

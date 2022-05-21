@@ -20,17 +20,9 @@ namespace BankApp2.Data.Repos
 
         public async Task<Disposition> CreateDisposition(Disposition disposition)
         {
-            try
-            {
-                var result = await _db.AddAsync(disposition);
-                await _db.SaveChangesAsync();
-                return disposition;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            var result = await _db.AddAsync(disposition);
+            await _db.SaveChangesAsync();
+            return disposition;
         }
     }
 }

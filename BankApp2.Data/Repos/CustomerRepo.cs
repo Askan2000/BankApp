@@ -21,18 +21,9 @@ namespace BankApp2.Data.Repos
 
         public async Task<Customer> AddCustomer(Customer customer)
         {
-            try
-            {
-                var result = await _db.Customers.AddAsync(customer);
-                await _db.SaveChangesAsync();
-                return result.Entity;
-            }
-            catch (Exception e)
-            {
-                var error = e.StackTrace;
-                throw;
-            }
-            
+            var result = await _db.Customers.AddAsync(customer);
+            await _db.SaveChangesAsync();
+            return result.Entity;        
         }
 
         public async Task<IEnumerable<Customer>> GetAllCustomers()
@@ -42,37 +33,28 @@ namespace BankApp2.Data.Repos
 
         public async Task<Customer> GetCustomer(int id)
         {
-            try
-            {
-                return await _db.Customers
-                    .Include(c => c.Dispositions)
-                    .ThenInclude(d => d.Account)
-                    .ThenInclude(a => a.Transactions)
-                    .Include(c => c.Dispositions)
-                    .ThenInclude(d => d.Account)
-                    .ThenInclude(a => a.AccountTypes)
-                    .SingleOrDefaultAsync(c => c.CustomerId == id);
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return await _db.Customers
+                .Include(c => c.Dispositions)
+                .ThenInclude(d => d.Account)
+                .ThenInclude(a => a.Transactions)
+                .Include(c => c.Dispositions)
+                .ThenInclude(d => d.Account)
+                .ThenInclude(a => a.AccountTypes)
+                .SingleOrDefaultAsync(c => c.CustomerId == id);
+
         }
 
         public async Task<Customer> GetCustomerByAspNetId(string aspNetId)
         {
-            try
-            {
-                return await _db.Customers
-                    .Include(c => c.Dispositions)
-                    .ThenInclude(d => d.Account)
-                    .ThenInclude(a => a.Transactions)
-                    .SingleOrDefaultAsync(c => c.AspNetUserId == aspNetId);
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return await _db.Customers
+                .Include(c => c.Dispositions)
+                .ThenInclude(d => d.Account)
+                .ThenInclude(a => a.Transactions)
+                .Include(c => c.Dispositions)
+                .ThenInclude(d => d.Account)
+                .ThenInclude(a => a.AccountTypes)
+                .SingleOrDefaultAsync(c => c.AspNetUserId == aspNetId);
+
         }
     }
 }

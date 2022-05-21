@@ -37,7 +37,7 @@ namespace BankApp2.Web.Pages
 
             if(result != null)
             {
-                NavigationManager.NavigateTo("SuccesfullAccountRegistration");
+                NavigationManager.NavigateTo($"SuccesfullAccountRegistration/{result.AccountId}");
             }
         }
     }
