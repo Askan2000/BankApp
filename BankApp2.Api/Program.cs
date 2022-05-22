@@ -55,18 +55,6 @@ builder.Services.AddAuthentication(opt =>
        };
    });
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-    builder =>
-    {
-        builder.AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader();
-    });
-});
-
-
 //Lägger på möjlighet för DI för mina interfejses
 builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<ICustomerRepo, CustomerRepo>();
@@ -83,10 +71,6 @@ builder.Services.AddTransient<IDispositionService, DispositionService>();
 builder.Services.AddTransient<IDispositionRepo, DispositionRepo>();
 builder.Services.AddTransient<ILoanService, LoanService>();
 builder.Services.AddTransient<ILoanRepo, LoanRepo>();
-
-
-//lägger på för att komma åt HttpContext i layers
-//builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers()
 .AddJsonOptions(options =>
@@ -113,11 +97,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors();
-app.UseRouting();
+//app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllers();
+//});
 
 app.Run();

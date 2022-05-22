@@ -28,7 +28,7 @@ namespace BankApp2.Api.Controllers
             _jwtTokenService = jwtTokenService;
         }
 
-        //[Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("register")]
         public async Task<ActionResult<Customer>> Register (UserRegisterDto user)
         {
@@ -102,11 +102,11 @@ namespace BankApp2.Api.Controllers
             }
             catch (Exception)
             {
-
                 return StatusCode(500, "Internal Server error");
             } 
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpGet("{userName}")]
         public async Task<ActionResult<bool>> CheckIdentityUserExists(string userName)
         {

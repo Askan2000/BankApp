@@ -20,6 +20,7 @@ namespace BankApp2.Api.Controllers
             _transactionService = service;
         }
 
+        [Authorize(Roles="Customer")]
         [HttpPost]
         public async Task<ActionResult<NewTransaction>> CreateTransaction(NewTransaction transaction)
         {
@@ -45,6 +46,7 @@ namespace BankApp2.Api.Controllers
                     "Fel i registrering av transaktion");
             }
         }
+        [Authorize(Roles="Customer")]
         [HttpGet("{accountId}")]
         public async Task<ActionResult<Transaction>> GetTransaction(int accountId)
         {

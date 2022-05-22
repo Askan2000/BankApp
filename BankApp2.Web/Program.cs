@@ -13,18 +13,17 @@ builder.Services.AddServerSideBlazor();
 
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7019/") });
 
+//Lägger till DI för authentication
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddAuthenticationCore();
+builder.Services.AddBlazoredSessionStorage();
+
 //Vi behöver berätta att vi ska kunna injecta IcustomerService i index.razor
 builder.Services.AddHttpClient<ICustomerWebService, CustomerWebService>();
 builder.Services.AddHttpClient<ITransactionWebService, TransactionWebService>();
 builder.Services.AddHttpClient<IAccountTypeWebService, AccountTypeWebService>();
 builder.Services.AddHttpClient<IAccountWebService, AccountWebService>();
 builder.Services.AddHttpClient<ILoanWebService, LoanWebService>();
-
-
-//Lägger till DI för authentication
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
-builder.Services.AddAuthenticationCore();
-builder.Services.AddBlazoredSessionStorage();
 
 var app = builder.Build();
 

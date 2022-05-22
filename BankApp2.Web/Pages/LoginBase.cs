@@ -34,7 +34,7 @@ namespace BankApp2.Web.Pages
             }
             else
             {                
-                var token = result.Content.ReadAsStringAsync();
+                var token = await result.Content.ReadAsStringAsync();
 
                 //lägg in token i local storage
 

@@ -9,7 +9,8 @@ namespace BankApp2.Web.WebServices
     {
         private readonly string _baseUrl = "https://localhost:7019/";
 
-        private readonly HttpClient _httpClient;
+        public  HttpClient _httpClient { get; }
+
         private readonly ISessionStorageService _sessionStorage;
 
 
@@ -28,7 +29,23 @@ namespace BankApp2.Web.WebServices
 
             try
             {
-                return await _httpClient.GetFromJsonAsync<Customer>(url);
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+
+                var token1 = await _sessionStorage.GetItemAsync<string>("token");
+                var token2 = token1.Replace("\"", "");
+
+                requestMessage.Headers.Authorization
+                    = new AuthenticationHeaderValue("Bearer", token2);
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                var responseStatusCode = response.StatusCode;
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                return await Task.FromResult(JsonConvert.DeserializeObject<Customer>(responseBody));
+
+
+                //return await _httpClient.GetFromJsonAsync<Customer>(url);
             }
 
             catch (Exception)
@@ -39,70 +56,90 @@ namespace BankApp2.Web.WebServices
 
         public async Task<Customer> GetCustomerByAspNetId(string aspNetId)
         {
-            var url = "api/customer/identity/" + aspNetId;
-
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-            var token1 = await _sessionStorage.GetItemAsync<string>("token");
-
-            var token2 = token1.Replace("\"","");
-
-            //requestMessage.Headers.Authorization = 
-            //    new AuthenticationHeaderValue("Bearer", token2);
-                
-            //var response = await _httpClient.SendAsync(requestMessage);
-
-            //var responseStatusCode = response.StatusCode;
-
             try
-            {          
-                return await _httpClient.GetFromJsonAsync<Customer>(url);
-            }
+            {
+                var url = "api/customer/identity/" + aspNetId;
 
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+                var token1 = await _sessionStorage.GetItemAsync<string>("token");
+
+                var token2 = token1.Replace("\"", "");
+
+                requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token2);
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                var responseStatusCode = response.StatusCode;
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                return await Task.FromResult(JsonConvert.DeserializeObject<Customer>(responseBody));
+            }
             catch (Exception)
             {
                 return null;
             }
         }   
 
-        public async Task<IEnumerable<Customer>> GetCustomers()
-        {
-            var url = _baseUrl + "api/customer/";
-            try
-            {
-                //HttpResponseMessage response = await _httpClient.GetAsync(url);
+        //public async Task<IEnumerable<Customer>> GetCustomers()
+        //{
+        //    var url = _baseUrl + "api/customer/";
+        //    try
+        //    {
+        //        //HttpResponseMessage response = await _httpClient.GetAsync(url);
 
-                return await _httpClient.GetFromJsonAsync<Customer[]>(url);         
+        //        return await _httpClient.GetFromJsonAsync<Customer[]>(url);         
 
-                //response.EnsureSuccessStatusCode();
+        //        //response.EnsureSuccessStatusCode();
 
-                //var json = await response.Content.ReadAsStringAsync();
+        //        //var json = await response.Content.ReadAsStringAsync();
 
-                //Customer customer = JsonConvert.DeserializeObject<Customer>(json);
+        //        //Customer customer = JsonConvert.DeserializeObject<Customer>(json);
 
-                //return customer;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //        //return customer;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
         public async Task<Customer> CreateCustomer(UserRegisterDto customerDetails)
         {
             var url = _baseUrl + "api/auth/register";
 
-            //string json = JsonConvert.SerializeObject(customerDetails);
+            string serializedCustomer = JsonConvert.SerializeObject(customerDetails);
 
-            var response = await _httpClient.PostAsJsonAsync(url, customerDetails);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+           
+            var token1 = await _sessionStorage.GetItemAsync<string>("token");
+            var token2 = token1.Replace("\"", "");
 
-            if (response.IsSuccessStatusCode)
-            {
-                string jsonReturn = await response.Content.ReadAsStringAsync();
+            requestMessage.Headers.Authorization =
+                new AuthenticationHeaderValue("Bearer", token2);
 
-                Customer newCustomer = JsonConvert.DeserializeObject<Customer>(jsonReturn);
+            requestMessage.Content = new StringContent(serializedCustomer);
 
-                return newCustomer;
-            }
-            return null;
+            requestMessage.Content.Headers.ContentType
+                = new MediaTypeHeaderValue("application/json");
+
+            var response = await _httpClient.SendAsync(requestMessage);
+
+            var responseStatusCode = response.StatusCode;
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var returnedObj = JsonConvert.DeserializeObject<Customer>(responseBody);
+
+            return await Task.FromResult(returnedObj);
+
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    string jsonReturn = await response.Content.ReadAsStringAsync();
+
+            //    Customer newCustomer = JsonConvert.DeserializeObject<Customer>(jsonReturn);
+
+            //    return newCustomer;
+            //}
+            //return null;
         }
 
         public async Task<bool> GetAspNetAccountByUserName(string userName)
@@ -110,7 +147,23 @@ namespace BankApp2.Web.WebServices
             var url = _baseUrl + "api/auth/" + userName;
             try
             {
-                return await _httpClient.GetFromJsonAsync<bool>(url);
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+
+                var token1 = await _sessionStorage.GetItemAsync<string>("token");
+                var token2 = token1.Replace("\"", "");
+
+                requestMessage.Headers.Authorization
+                    = new AuthenticationHeaderValue("Bearer", token2);
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                var responseStatusCode = response.StatusCode;
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                return await Task.FromResult(JsonConvert.DeserializeObject<bool>(responseBody));
+
+
+                //return await _httpClient.GetFromJsonAsync<bool>(url);
             }
             catch (Exception)
             {

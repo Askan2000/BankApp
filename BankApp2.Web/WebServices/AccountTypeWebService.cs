@@ -1,6 +1,7 @@
 ﻿using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace BankApp2.Web.WebServices
 {
@@ -9,10 +10,12 @@ namespace BankApp2.Web.WebServices
         private readonly string _baseUrl = "https://localhost:7019/";
 
         private readonly HttpClient _httpClient;
+        private readonly ISessionStorageService _sessionStorage;
 
-        public AccountTypeWebService(HttpClient httpClient)
+        public AccountTypeWebService(HttpClient httpClient, ISessionStorageService sessionStorage)
         {
             _httpClient = httpClient;
+            _sessionStorage = sessionStorage;
         }
 
         public async Task<AccountType> CreateAccountType(AccountTypeDto accountType)
@@ -21,22 +24,42 @@ namespace BankApp2.Web.WebServices
 
             try
             {
-                var response = await _httpClient.PostAsJsonAsync(url, accountType);
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+                string serializedAccountType = JsonConvert.SerializeObject(accountType);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string jsonReturn = await response.Content.ReadAsStringAsync();
+                var token1 = await _sessionStorage.GetItemAsync<string>("token");
+                var token2 = token1.Replace("\"", "");
 
-                    AccountType newAccountType = JsonConvert.DeserializeObject<AccountType>(jsonReturn);
+                requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token2);
 
-                    return newAccountType;
-                }
-                return null;
+                requestMessage.Content = new StringContent(serializedAccountType);
+
+                requestMessage.Content.Headers.ContentType
+                    = new MediaTypeHeaderValue("application/json");
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                var responseStatusCode = response.StatusCode;
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                var returnedObj = JsonConvert.DeserializeObject<AccountType>(responseBody);
+
+                return await Task.FromResult(returnedObj);
+
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    string jsonReturn = await response.Content.ReadAsStringAsync();
+
+                //    AccountType newAccountType = JsonConvert.DeserializeObject<AccountType>(jsonReturn);
+
+                //    return newAccountType;
+                //}
+                //return null;
             }
             catch (Exception)
             {
-
-                throw;
+                return null;
             }
         }
 
@@ -44,9 +67,23 @@ namespace BankApp2.Web.WebServices
         {
             var url = _baseUrl + "api/accounttype/";
             try
-            {
+            {                
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 
-                return await _httpClient.GetFromJsonAsync<AccountType[]>(url);
+                var token1 = await _sessionStorage.GetItemAsync<string>("token");
+                var token2 = token1.Replace("\"", "");
+
+                requestMessage.Headers.Authorization
+                    = new AuthenticationHeaderValue("Bearer", token2);
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                var responseStatusCode = response.StatusCode;
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                return await Task.FromResult(JsonConvert.DeserializeObject<AccountType[]>(responseBody));
+
+                //return await _httpClient.GetFromJsonAsync<AccountType[]>(url);
             }
             catch
             {

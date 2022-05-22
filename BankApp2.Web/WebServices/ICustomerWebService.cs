@@ -6,7 +6,7 @@ namespace BankApp2.Web.WebServices
 {
     public interface ICustomerWebService
     {
-        Task<IEnumerable<Customer>> GetCustomers();
+        //Task<IEnumerable<Customer>> GetCustomers();
         Task<Customer> GetCustomer(int id);
         Task<Customer> GetCustomerByAspNetId(string apNetId);
         Task<Customer> CreateCustomer(UserRegisterDto customerDetails);

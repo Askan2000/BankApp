@@ -25,6 +25,7 @@ namespace BankApp2.Api.Controllers
             _transactionService = transactionService;
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<ActionResult<Loan>> CreateLoan(LoanDto loan)
         {
@@ -61,11 +62,8 @@ namespace BankApp2.Api.Controllers
             }
             catch (Exception)
             {
-
                 return StatusCode(500, "Internal Server error");
             }
-            
-
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace BankApp2.Web.WebServices
@@ -10,26 +11,57 @@ namespace BankApp2.Web.WebServices
         private readonly string _baseUrl = "https://localhost:7019/";
 
         private readonly HttpClient _httpClient;
+        private readonly ISessionStorageService _sessionStorage;
 
-        public TransactionWebService(HttpClient httpClient)
+        public TransactionWebService(HttpClient httpClient, ISessionStorageService sessionStorage)
         {
             _httpClient = httpClient;
+            _sessionStorage = sessionStorage;
         }
         public async Task<NewTransaction> CreateTransaction(NewTransaction transaction)
         {
             var url = _baseUrl + "api/transaction";
 
-            var response = await _httpClient.PostAsJsonAsync(url, transaction);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+            string serializedTransaction = JsonConvert.SerializeObject(transaction);
 
-            if(response.IsSuccessStatusCode)
+            var token1 = await _sessionStorage.GetItemAsync<string>("token");
+            var token2 = token1.Replace("\"", "");
+
+            requestMessage.Headers.Authorization =
+                new AuthenticationHeaderValue("Bearer", token2);
+
+            requestMessage.Content = new StringContent(serializedTransaction);
+
+            requestMessage.Content.Headers.ContentType
+                = new MediaTypeHeaderValue("application/json");
+
+            var response = await _httpClient.SendAsync(requestMessage);
+
+            if (response.IsSuccessStatusCode)
             {
-                string jsonReturn = await response.Content.ReadAsStringAsync();
+                var responseStatusCode = response.StatusCode;
+                var responseBody = await response.Content.ReadAsStringAsync();
 
-                NewTransaction returnedTransaction = JsonConvert.DeserializeObject<NewTransaction>(jsonReturn);
+                var returnedObj = JsonConvert.DeserializeObject<NewTransaction>(responseBody);
 
-                return returnedTransaction;
+                return await Task.FromResult(returnedObj);
             }
             return null;
+
+
+
+            //var response = await _httpClient.PostAsJsonAsync(url, transaction);
+
+            //if(response.IsSuccessStatusCode)
+            //{
+            //    string jsonReturn = await response.Content.ReadAsStringAsync();
+
+            //    NewTransaction returnedTransaction = JsonConvert.DeserializeObject<NewTransaction>(jsonReturn);
+
+            //    return returnedTransaction;
+            //}
+            //return null;
         }
 
         public async Task<Transaction> GetTransaction(int accountId)
@@ -38,9 +70,25 @@ namespace BankApp2.Web.WebServices
 
             try
             {
-                var result = await _httpClient.GetFromJsonAsync<Transaction>(url);
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 
-                return result;
+                var token1 = await _sessionStorage.GetItemAsync<string>("token");
+                var token2 = token1.Replace("\"", "");
+
+                requestMessage.Headers.Authorization
+                    = new AuthenticationHeaderValue("Bearer", token2);
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                var responseStatusCode = response.StatusCode;
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                return await Task.FromResult(JsonConvert.DeserializeObject<Transaction>(responseBody));
+
+
+                //var result = await _httpClient.GetFromJsonAsync<Transaction>(url);
+
+                //return result;
             }
 
             catch (Exception)

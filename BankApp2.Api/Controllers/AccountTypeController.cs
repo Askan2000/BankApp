@@ -18,7 +18,7 @@ namespace BankApp2.Api.Controllers
             _accountTypeService = accountTypeService;
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AccountType>>> GetAccountTypes()
         {
@@ -28,14 +28,13 @@ namespace BankApp2.Api.Controllers
             }
             catch (Exception)
             {
-
                 return NotFound("Inga kontotyper hittades");
             }
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<AccountType>> CreateTransaction(AccountTypeDto accountType)
+        public async Task<ActionResult<AccountType>> CreateAccountType(AccountTypeDto accountType)
         {
             try
             {
@@ -52,7 +51,6 @@ namespace BankApp2.Api.Controllers
             }
             catch (Exception)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Fel i registrering av kontotyp");
             }

@@ -17,6 +17,7 @@ namespace BankApp2.Api.Controllers
             _customerService = service;
         }
 
+        [Authorize]
         [HttpGet("{customerId:int}")]
         public async Task<ActionResult<Customer>> GetCustomer(int customerId)
         {
@@ -39,11 +40,10 @@ namespace BankApp2.Api.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("identity/{aspNetId}")]
         public async Task<ActionResult<Customer>> GetCustomerByAspNetId(string aspNetId)
         {
-
             try
             {
                 var result = await _customerService.GetCustomerByAspNetId(aspNetId);

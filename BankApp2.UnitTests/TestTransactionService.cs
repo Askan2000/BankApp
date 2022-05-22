@@ -25,6 +25,24 @@ namespace BankApp2.UnitTests
             _transactionService = new TransactionService(_transactionRepo.Object, _accountRepo.Object, _logger.Object);
         }
 
+        //Testar att funktionen CreateTransaction i service-lagret kallar på metoder i repot och returnerar ett Transaction-objekt
+        [Fact]
+        public void TestCreateTransaction_returnCreatedTransaction()
+        {
+            Transaction returnedTransaction = new Transaction();
+
+            //Setup Mock
+            _transactionRepo
+                .Setup(x => x.PostTransaction(It.IsAny<Transaction>())).ReturnsAsync((Task<Transaction> transaction) => returnedTransaction);
+
+            _transactionRepo
+                .Setup(x => x.GetTransaction(It.IsAny<int>())).ReturnsAsync((Task<Transaction> transaction) => returnedTransaction);
+
+            var result = _transactionService.CreateTransaction(1, 1, "transactiontype", "transactionoperation");
+
+            Assert.IsType<Task<Transaction>>(result);
+        }
+
         [Fact]
         public async Task TestCreateTransaction_throwException()
         {
@@ -46,22 +64,6 @@ namespace BankApp2.UnitTests
             await Assert.ThrowsAsync<Exception>(() => _transactionService.CreateTransaction(accountId, amount, transactionType, transactionOperation));
         }
 
-        [Fact]
-        public async Task TestCreateTransaction_returnCreatedTransaction()
-        {
-            Transaction returnedTransaction = new Transaction();
-            returnedTransaction.TransactionId = 1;
-
-            //Setup Mock
-            _transactionRepo
-                .Setup(x => x.PostTransaction(It.IsAny<Transaction>())).ReturnsAsync((Task<Transaction> transaction) => returnedTransaction);
-
-            _transactionRepo
-                .Setup(x => x.GetTransaction(It.IsAny<int>())).ReturnsAsync((Task<Transaction> transaction) => returnedTransaction);
-
-            //var result = await _transactionService.CreateTransaction(1, 1, "transactiontype", "transactionoperation");
-
-            Assert.True((await _transactionService.CreateTransaction(1, 1, "transactiontype", "transactionoperation")) != null);
-        }
+        
     }
 }

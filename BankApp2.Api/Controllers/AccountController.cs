@@ -1,6 +1,7 @@
 ﻿using BankApp2.Core.Interfaces;
 using BankApp2.Shared.Models;
 using BankApp2.Shared.ModelsNotInDB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,6 +57,7 @@ namespace BankApp2.Api.Controllers
             }
             
          }
+        [Authorize]
         [HttpGet("{accountId}")]
         public async Task<ActionResult<Account>> GetAccount(int accountId)
         {
