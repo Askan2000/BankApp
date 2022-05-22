@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="Moq" Version="4.18.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.1.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BankApp2.Api\BankApp2.Api.csproj" />
+    <ProjectReference Include="..\BankApp2.Core\BankApp2.Core.csproj" />
+    <ProjectReference Include="..\BankApp2.Data\BankApp2.Data.csproj" />
+    <ProjectReference Include="..\BankApp2.Shared\BankApp2.Shared.csproj" />
+    <ProjectReference Include="..\BankApp2.Web\BankApp2.Web.csproj" />
+    <ProjectReference Include="..\Oscar.Components\Oscar.Components.csproj" />
+  </ItemGroup>
+
+</Project>

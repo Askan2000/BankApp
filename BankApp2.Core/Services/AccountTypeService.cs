@@ -27,6 +27,8 @@ namespace BankApp2.Core.Services
 
         public async Task<AccountType> CreateAccountType(AccountTypeDto accountType)
         {
+            if(accountType == null)
+                throw new ArgumentNullException(nameof(accountType));
             try
             {
                 var mappedAccount = _mapper.Map<AccountType>(accountType);

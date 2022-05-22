@@ -41,6 +41,8 @@ namespace BankApp2.Core.Services
 
         public async Task<Account> GetAccount(int accountId)
         {
+            if(accountId < 1)
+                throw new ArgumentOutOfRangeException(nameof(accountId));
             try
             {
                 return await _accountRepo.GetAccount(accountId);
@@ -54,6 +56,8 @@ namespace BankApp2.Core.Services
 
         public async Task<Account> UpdateAccount(int accountId, decimal amount)
         {
+            if(accountId < 1 || amount < 1)
+                throw new ArgumentOutOfRangeException(nameof(accountId));
             try
             {
                 return await _accountRepo.UpdateAccount(accountId, amount);

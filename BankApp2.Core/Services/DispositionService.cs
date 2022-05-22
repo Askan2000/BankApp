@@ -23,6 +23,12 @@ namespace BankApp2.Core.Services
 
         public async Task<Disposition> CreateDisposition(int CustomerId, int AccountId, string dispositionType)
         {
+            if(CustomerId < 1)
+                throw new ArgumentOutOfRangeException(nameof(CustomerId));
+            if(AccountId < 1)
+                throw new ArgumentOutOfRangeException(nameof(AccountId));
+            if (dispositionType == "")
+                throw new Exception("disposition type måste vara OWNER eller DISPONENT");
             try
             {
                 Disposition disposition = new Disposition();

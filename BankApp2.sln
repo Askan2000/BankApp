@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankApp2.Api", "BankApp2.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oscar.Components", "Oscar.Components\Oscar.Components.csproj", "{9538776F-3893-48A8-A743-E6592A2A1A31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankApp2.UnitTests", "BankApp2.UnitTests\BankApp2.UnitTests.csproj", "{6D1040C6-EFAA-4157-9979-26C28B83C188}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{9538776F-3893-48A8-A743-E6592A2A1A31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9538776F-3893-48A8-A743-E6592A2A1A31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9538776F-3893-48A8-A743-E6592A2A1A31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D1040C6-EFAA-4157-9979-26C28B83C188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D1040C6-EFAA-4157-9979-26C28B83C188}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D1040C6-EFAA-4157-9979-26C28B83C188}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D1040C6-EFAA-4157-9979-26C28B83C188}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

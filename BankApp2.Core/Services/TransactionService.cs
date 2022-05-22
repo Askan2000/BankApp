@@ -26,6 +26,8 @@ namespace BankApp2.Core.Services
 
         public async Task<NewTransaction> CreateTransaction(NewTransaction transaction)
         {
+            if (int.Parse(transaction.Amount) < 0)
+                throw new Exception("Amount måste vara större än 0");
             try
             {
                 //Här mappar jag om till ett Transaction-objekt och skickar vidare till repot
@@ -77,12 +79,20 @@ namespace BankApp2.Core.Services
             {
                 _logger.LogError($"Something went wrong in the {nameof(CreateTransaction)} service method {ex} ");
                 throw;
-            }
-            
+            }         
         }
 
         public async Task<Transaction> CreateTransaction(int accountId, decimal amount, string transactionType, string transactionOperation)
         {
+            if(accountId < 1)
+                throw new ArgumentOutOfRangeException(nameof(accountId));
+            if(amount < 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            if(transactionType == "")
+                throw new Exception("transaction type måste innehålla ett värde");
+            if(transactionOperation == null)
+                throw new Exception("transaction operation får inte vara null");
+
             try
             {
                 Transaction transaction = new Transaction();

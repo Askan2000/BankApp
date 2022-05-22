@@ -27,6 +27,10 @@ namespace BankApp2.Core.Services
 
         public async Task<Customer> AddCustomer(UserRegisterDto user, string aspNetUserId)
         {
+            if(user == null)
+                throw new ArgumentNullException(nameof(user));
+            if(aspNetUserId == null)
+                throw new ArgumentNullException(nameof(aspNetUserId));
             try
             {
                 var mappedCustomer = _mapper.Map<Customer>(user);
@@ -57,6 +61,8 @@ namespace BankApp2.Core.Services
 
         public async Task<Customer> GetCustomer(int id)
         {
+            if(id < 1)
+                throw new ArgumentOutOfRangeException(nameof(id));
             try
             {
                 return await _repo.GetCustomer(id);
